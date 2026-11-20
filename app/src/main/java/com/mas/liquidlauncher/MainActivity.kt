@@ -1,12 +1,14 @@
 package com.mas.liquidlauncher
 
+import android.app.role.RoleManager
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 
@@ -28,9 +30,24 @@ class MainActivity : ComponentActivity() {
                     packageManager = packageManager,
                     onLaunchApp = { packageName ->
                         packageManager.getLaunchIntentForPackage(packageName)?.let(::startActivity)
-                    }
+                    },
+                    onSetAsDefaultHome = ::requestDefaultHome
                 )
             }
+        }
+    }
+
+    private fun requestDefaultHome() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager = getSystemService(RoleManager::class.java)
+            if (roleManager != null && roleManager.isRoleAvailable(RoleManager.ROLE_HOME) &&
+                !roleManager.isRoleHeld(RoleManager.ROLE_HOME)) {
+                startActivity(roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME))
+            } else {
+                startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
+            }
+        } else {
+            startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
         }
     }
 }
