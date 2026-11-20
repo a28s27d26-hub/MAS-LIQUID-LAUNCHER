@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -173,9 +174,9 @@ private fun AppTile(app: LaunchApp, onClick: () -> Unit) {
 
 @Composable
 private fun AppIcon(app: LaunchApp, onClick: () -> Unit) {
-    androidx.compose.foundation.Image(
-        painter = androidx.compose.ui.graphics.painter.rememberDrawablePainter(app.icon),
-        contentDescription = app.label,
+    AndroidView(
+        factory = { context -> android.widget.ImageView(context).apply { scaleType = android.widget.ImageView.ScaleType.FIT_CENTER } },
+        update = { it.setImageDrawable(app.icon) },
         modifier = Modifier.size(48.dp).clip(RoundedCornerShape(15.dp)).clickable(onClick = onClick)
     )
 }
