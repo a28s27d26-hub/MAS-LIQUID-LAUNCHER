@@ -87,7 +87,7 @@ fun LiquidLauncherScreen(packageManager: PackageManager, onLaunchApp: (String) -
                         Text(time, color = Color.White, fontSize = 46.sp, fontWeight = FontWeight.Light, letterSpacing = (-2).sp)
                         Text(date.uppercase(Locale.getDefault()), color = Muted, fontSize = 9.sp, letterSpacing = 2.sp)
                     }
-                    GlassCircleButton(Icons.Rounded.MoreHoriz) { onSetAsDefaultHome() }
+                    GlassCircleButton(Icons.Rounded.Home) { onSetAsDefaultHome() }
                 }
                 Spacer(Modifier.height(22.dp))
 
