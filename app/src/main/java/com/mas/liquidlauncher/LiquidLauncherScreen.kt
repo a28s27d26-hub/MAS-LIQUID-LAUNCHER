@@ -41,7 +41,7 @@ private val Warm = Color(0xFF9A7655)
 private val Muted = Color(0xFFBEBAB6)
 
 @Composable
-fun LiquidLauncherScreen(packageManager: PackageManager, onLaunchApp: (String) -> Unit) {
+fun LiquidLauncherScreen(packageManager: PackageManager, onLaunchApp: (String) -> Unit, onSetAsDefaultHome: () -> Unit) {
     var search by remember { mutableStateOf("") }
     var showAll by remember { mutableStateOf(false) }
     var apps by remember { mutableStateOf<List<LaunchApp>>(emptyList()) }
@@ -61,7 +61,7 @@ fun LiquidLauncherScreen(packageManager: PackageManager, onLaunchApp: (String) -
     val filtered = remember(apps, search) {
         if (search.isBlank()) apps else apps.filter { it.label.contains(search, ignoreCase = true) }
     }
-    val time = remember { SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()) }
+    val time = remember { SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date()) }
     val date = remember { SimpleDateFormat("EEEE  •  d MMMM", Locale.getDefault()).format(Date()) }
 
     Box(
@@ -87,7 +87,7 @@ fun LiquidLauncherScreen(packageManager: PackageManager, onLaunchApp: (String) -
                         Text(time, color = Color.White, fontSize = 46.sp, fontWeight = FontWeight.Light, letterSpacing = (-2).sp)
                         Text(date.uppercase(Locale.getDefault()), color = Muted, fontSize = 9.sp, letterSpacing = 2.sp)
                     }
-                    GlassCircleButton(Icons.Rounded.MoreHoriz) { showAll = !showAll }
+                    GlassCircleButton(Icons.Rounded.MoreHoriz) { onSetAsDefaultHome() }
                 }
                 Spacer(Modifier.height(22.dp))
 
